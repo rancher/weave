@@ -34,6 +34,11 @@ WEAVEDB_UPTODATE=.weavedb.uptodate
 
 IMAGES_UPTODATE=$(WEAVER_UPTODATE) $(WEAVEEXEC_UPTODATE) $(PLUGIN_UPTODATE) $(WEAVEDB_UPTODATE)
 
+ARCH ?= $(shell uname -m)
+ifeq ($(ARCH),"x86_64")
+RACE:="-race"
+endif
+
 WEAVER_IMAGE=$(DOCKERHUB_USER)/weave
 WEAVEEXEC_IMAGE=$(DOCKERHUB_USER)/weaveexec
 PLUGIN_IMAGE=$(DOCKERHUB_USER)/plugin
@@ -125,7 +130,7 @@ lint:
 endif
 
 $(BUILD_UPTODATE): build/*
-	$(SUDO) docker build -t $(BUILD_IMAGE) build/
+	$(SUDO) docker build --build-arg RACE=$(RACE) -t $(BUILD_IMAGE) build/
 	touch $@
 
 $(WEAVER_UPTODATE): prog/weaver/Dockerfile $(WEAVER_EXE)

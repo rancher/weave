@@ -1,4 +1,4 @@
-FROM alpine
+FROM zambon/alpine-multi
 
 MAINTAINER Weaveworks Inc <help@weave.works>
 LABEL works.weave.role=system
